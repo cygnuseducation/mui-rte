@@ -40,6 +40,12 @@ const styles = ({ spacing }: Theme) => createStyles({
     },
     linkTextField: {
         width: "100%"
+    },
+    popoverButtons: {
+        margin: '0'
+    },
+    submitButton: {
+        minWidth: 0
     }
 })
 
@@ -66,10 +72,15 @@ const UrlPopover: FunctionComponent<IUrlPopoverStateProps> = (props) => {
         setData({ ...data, [prop]: intValue })
     }
 
+    const onSave = () => {
+        props.onConfirm(props.isMedia, data.url, data.width, data.height, data.alignment, data.type)
+    }
+
     return (
         <Popover
             open={props.anchor !== undefined}
             anchorEl={props.anchor}
+            onClose={onSave}
             anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "left"
@@ -81,7 +92,7 @@ const UrlPopover: FunctionComponent<IUrlPopoverStateProps> = (props) => {
         >
             <div className={classes.linkPopover}>
                 <Grid container spacing={1}>
-                    <Grid container item xs spacing={1}>
+                    <Grid container item xs={12}>
                         <Grid item xs={12}>
                             <TextField
                                 className={classes.linkTextField}
@@ -161,16 +172,24 @@ const UrlPopover: FunctionComponent<IUrlPopoverStateProps> = (props) => {
                             </>
                             : null}
                     </Grid>
-                    <Grid container item xs={12} direction="row" justifyContent="flex-end">
+                    <Grid
+                        container
+                        className={classes.popoverButtons}
+                        item xs={12}
+                        direction="row"
+                        justifyContent="flex-end"
+                    >
                         {props.data && props.data.url ?
                         <Button
+                            className={classes.submitButton}
                             onClick={() => props.onConfirm(props.isMedia, "")}
                         >
                             <DeleteIcon />
                         </Button>
                         : null }
                         <Button
-                            onClick={() => props.onConfirm(props.isMedia, data.url, data.width, data.height, data.alignment, data.type)}
+                            className={classes.submitButton}
+                            onClick={onSave}
                         >
                             <CheckIcon />
                         </Button>
